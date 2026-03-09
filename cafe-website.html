@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kopi Ruang — Cafe & Books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EDD8;
+    --warm: #E8D5B0;
+    --brown: #6B4C2A;
+    --dark: #2C1A0E;
+    --accent: #C8844A;
+    --soft: #A0836A;
+    --green: #4A5E3A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'Lato', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(245, 237, 216, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(107, 76, 42, 0.15);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--brown);
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--accent); font-style: italic; }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--soft);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: color 0.3s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--green);
+    color: var(--cream);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    width: fit-content;
+    font-weight: 700;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 1.1;
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    color: var(--accent);
+    font-style: italic;
+    display: block;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--soft);
+    line-height: 1.8;
+    max-width: 400px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--brown);
+    color: var(--cream);
+    padding: 14px 32px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--brown);
+    padding: 14px 32px;
+    border: 2px solid var(--brown);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-outline:hover {
+    background: var(--brown);
+    color: var(--cream);
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--warm);
+  }
+
+  .hero-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #D4B896 0%, #C4956A 40%, #8B5E3C 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .hero-img-placeholder::before {
+    content: '☕';
+    font-size: 8rem;
+    opacity: 0.3;
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 40px;
+    left: -20px;
+    background: var(--dark);
+    color: var(--cream);
+    padding: 20px 28px;
+    border-radius: 8px;
+    z-index: 3;
+  }
+
+  .hero-badge p { font-size: 0.75rem; opacity: 0.7; margin-bottom: 4px; }
+  .hero-badge strong { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+
+  /* STRIP */
+  .strip {
+    background: var(--brown);
+    color: var(--cream);
+    padding: 14px;
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  /* ABOUT */
+  .about {
+    padding: 100px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 2px;
+    background: var(--accent);
+    display: block;
+  }
+
+  .about h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--dark);
+  }
+
+  .about p {
+    color: var(--soft);
+    line-height: 1.9;
+    font-weight: 300;
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .stat {
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+  }
+
+  .stat strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--brown);
+  }
+
+  .stat span { font-size: 0.8rem; color: var(--soft); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .about-img {
+    background: linear-gradient(160deg, var(--warm) 0%, #BFA07A 100%);
+    border-radius: 12px;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(200,132,74,0.3) 0%, transparent 60%);
+  }
+
+  /* MENU */
+  #menu {
+    background: var(--dark);
+    padding: 100px 80px;
+    color: var(--cream);
+  }
+
+  #menu .section-label { color: var(--accent); }
+  #menu .section-label::before { background: var(--accent); }
+
+  #menu h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 50px;
+    color: var(--cream);
+  }
+
+  .menu-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 8px 20px;
+    border: 1px solid rgba(245,237,216,0.2);
+    background: transparent;
+    color: rgba(245,237,216,0.5);
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: all 0.3s;
+    font-family: 'Lato', sans-serif;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--cream);
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .menu-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s;
+    display: none;
+  }
+
+  .menu-card.show { display: block; }
+
+  .menu-card:hover {
+    background: rgba(200,132,74,0.1);
+    border-color: rgba(200,132,74,0.3);
+    transform: translateY(-4px);
+  }
+
+  .menu-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .menu-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--cream);
+  }
+
+  .price {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+
+  .menu-card p {
+    font-size: 0.85rem;
+    color: rgba(245,237,216,0.5);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .menu-emoji {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  /* RESERVASI */
+  #reservasi {
+    padding: 100px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  #reservasi h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+    color: var(--dark);
+  }
+
+  #reservasi p {
+    color: var(--soft);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 30px;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: var(--soft);
+  }
+
+  .info-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--warm);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .form-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(44,26,14,0.08);
+  }
+
+  .form-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    color: var(--dark);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--soft);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--warm);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Lato', sans-serif;
+    color: var(--dark);
+    background: var(--cream);
+    transition: border-color 0.3s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--brown);
+    color: var(--cream);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    transition: all 0.3s;
+  }
+
+  .submit-btn:hover { background: var(--accent); transform: translateY(-2px); }
+
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background: rgba(74,94,58,0.1);
+    border-radius: 8px;
+    color: var(--green);
+    font-weight: 700;
+    margin-top: 16px;
+  }
+
+  /* MAPS */
+  #lokasi {
+    background: var(--warm);
+    padding: 100px 80px;
+  }
+
+  #lokasi h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 8px;
+    color: var(--dark);
+  }
+
+  #lokasi > p {
+    color: var(--soft);
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .map-container {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(44,26,14,0.15);
+    background: #e0d5c0;
+    height: 400px;
+    position: relative;
+  }
+
+  .map-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #D4C5A0 0%, #C8B888 100%);
+    gap: 16px;
+  }
+
+  .map-pin { font-size: 3rem; animation: bounce 2s infinite; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .map-placeholder p { color: var(--brown); font-weight: 700; font-size: 1rem; }
+  .map-placeholder small { color: var(--soft); font-size: 0.85rem; }
+
+  .map-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--brown);
+    color: var(--cream);
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.3s;
+  }
+
+  .map-open-btn:hover { background: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: var(--cream);
+    padding: 60px 80px 40px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--cream);
+  }
+
+  .footer-logo span { color: var(--accent); font-style: italic; }
+
+  footer p { color: rgba(245,237,216,0.5); font-size: 0.9rem; line-height: 1.8; font-weight: 300; }
+
+  footer h4 {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  footer ul { list-style: none; }
+  footer li { margin-bottom: 10px; }
+  footer a { color: rgba(245,237,216,0.5); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+  footer a:hover { color: var(--cream); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: rgba(245,237,216,0.3);
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero, .about, #reservasi { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+    .hero-left { padding: 40px; }
+    .about, #reservasi, #menu, #lokasi, footer { padding: 60px 30px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Kopi<span>Ruang</span></div>
+  <ul>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reservasi">Reservasi</a></li>
+    <li><a href="#lokasi">Lokasi</a></li>
+  </ul>
+  <a href="#reservasi" class="btn-primary" style="padding:10px 24px;font-size:0.75rem;">Booking Meja</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="hero-tag">☕ Cafe & Ruang Baca · Gresik</span>
+    <h1>Tempat Terbaik<em>untuk Melambat</em></h1>
+    <p class="hero-desc">Kopi yang diseduh dengan sabar, buku yang menunggu dibaca, dan kursi yang nyaman. Selamat datang di rumah kedua kamu.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">Lihat Menu</a>
+      <a href="#reservasi" class="btn-outline">Booking Meja</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-placeholder"></div>
+    <div class="hero-badge">
+      <p>Buka setiap hari</p>
+      <strong>08.00 – 22.00</strong>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <span>☕ Single Origin Coffee</span>
+  <span>📚 Reading Corner</span>
+  <span>🎵 Chill Playlist</span>
+  <span>🌿 Pet Friendly</span>
+  <span>📶 Fast WiFi</span>
+</div>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="fade-up">
+    <div class="section-label">Tentang Kami</div>
+    <h2>Lebih dari Sekadar Kafe</h2>
+    <p>KopiRuang lahir dari keinginan sederhana: menciptakan ruang di mana kamu bisa menikmati kopi berkualitas sambil membaca, bekerja, atau sekadar melepas penat dari kesibukan sehari-hari.</p>
+    <p>Setiap cangkir kopi kami diseduh dari biji pilihan petani lokal Indonesia, dengan metode yang kami percayai bisa menghadirkan cita rasa terbaik untukmu.</p>
+    <div class="about-stats">
+      <div class="stat"><strong>50+</strong><span>Pilihan Menu</span></div>
+      <div class="stat"><strong>200+</strong><span>Buku di Koleksi</span></div>
+      <div class="stat"><strong>4.9★</strong><span>Rating Google</span></div>
+      <div class="stat"><strong>3 Thn</strong><span>Melayani Gresik</span></div>
+    </div>
+  </div>
+  <div class="about-img fade-up">📖</div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-label">Pilihan Kami</div>
+  <h2>Menu Favorit</h2>
+
+  <div class="menu-tabs">
+    <button class="tab-btn active" onclick="filterMenu('all', this)">Semua</button>
+    <button class="tab-btn" onclick="filterMenu('kopi', this)">☕ Kopi</button>
+    <button class="tab-btn" onclick="filterMenu('nonkopi', this)">🍵 Non-Kopi</button>
+    <button class="tab-btn" onclick="filterMenu('makanan', this)">🍞 Makanan</button>
+    <button class="tab-btn" onclick="filterMenu('snack', this)">🍰 Snack</button>
+  </div>
+
+  <div class="menu-grid">
+    <!-- KOPI -->
+    <div class="menu-card show" data-cat="kopi">
+      <div class="menu-emoji">☕</div>
+      <div class="menu-card-top"><h3>Signature Latte</h3><span class="price">Rp 28K</span></div>
+      <p>Espresso blend kami dengan susu segar, sedikit manis dan sangat smooth</p>
+    </div>
+    <div class="menu-card show" data-cat="kopi">
+      <div class="menu-emoji">🧊</div>
+      <div class="menu-card-top"><h3>Iced Brown Sugar</h3><span class="price">Rp 32K</span></div>
+      <p>Cold brew dengan gula merah caramel, creamy dan segar</p>
+    </div>
+    <div class="menu-card show" data-cat="kopi">
+      <div class="menu-emoji">🌿</div>
+      <div class="menu-card-top"><h3>Matcha Espresso</h3><span class="price">Rp 35K</span></div>
+      <p>Perpaduan unik matcha premium Jepang dengan espresso bold kami</p>
+    </div>
+    <div class="menu-card show" data-cat="kopi">
+      <div class="menu-emoji">☕</div>
+      <div class="menu-card-top"><h3>V60 Single Origin</h3><span class="price">Rp 38K</span></div>
+      <p>Manual brew dengan biji pilihan dari Flores, bright & fruity</p>
+    </div>
+    <!-- NON KOPI -->
+    <div class="menu-card show" data-cat="nonkopi">
+      <div class="menu-emoji">🍵</div>
+      <div class="menu-card-top"><h3>Hojicha Latte</h3><span class="price">Rp 30K</span></div>
+      <p>Teh panggang Jepang dengan susu oat, nutty dan hangat</p>
+    </div>
+    <div class="menu-card show" data-cat="nonkopi">
+      <div class="menu-emoji">🫐</div>
+      <div class="menu-card-top"><h3>Berry Soda</h3><span class="price">Rp 25K</span></div>
+      <p>Campuran berry segar dengan soda ringan, tanpa kafein</p>
+    </div>
+    <!-- MAKANAN -->
+    <div class="menu-card show" data-cat="makanan">
+      <div class="menu-emoji">🥪</div>
+      <div class="menu-card-top"><h3>Croque Monsieur</h3><span class="price">Rp 45K</span></div>
+      <p>Sandwich panggang dengan ham, keju gruyère, dan saus béchamel</p>
+    </div>
+    <div class="menu-card show" data-cat="makanan">
+      <div class="menu-emoji">🥗</div>
+      <div class="menu-card-top"><h3>Avocado Toast</h3><span class="price">Rp 42K</span></div>
+      <p>Sourdough dengan avocado smash, telur poached, dan red chili flakes</p>
+    </div>
+    <!-- SNACK -->
+    <div class="menu-card show" data-cat="snack">
+      <div class="menu-emoji">🍰</div>
+      <div class="menu-card-top"><h3>Burnt Cheesecake</h3><span class="price">Rp 38K</span></div>
+      <p>Gaya Basque, creamy di dalam dengan layer karamel di luar</p>
+    </div>
+    <div class="menu-card show" data-cat="snack">
+      <div class="menu-emoji">🫙</div>
+      <div class="menu-card-top"><h3>Tiramisu Jar</h3><span class="price">Rp 32K</span></div>
+      <p>Klasik Italia dalam toples lucu, cocok buat nemenin baca buku</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVASI -->
+<section id="reservasi">
+  <div class="fade-up">
+    <div class="section-label">Booking</div>
+    <h2>Reservasi Meja</h2>
+    <p>Pastikan tempat duduk favoritmu tersedia! Reservasi bisa dilakukan minimal 2 jam sebelum kedatangan.</p>
+
+    <div class="info-row"><div class="info-icon">📍</div><span>Jl. [Nama Jalan], Gresik, Jawa Timur</span></div>
+    <div class="info-row"><div class="info-icon">🕗</div><span>Buka setiap hari: 08.00 – 22.00 WIB</span></div>
+    <div class="info-row"><div class="info-icon">📱</div><span>+62 8xx-xxxx-xxxx</span></div>
+    <div class="info-row"><div class="info-icon">📧</div><span>hello@kopiruan.id</span></div>
+  </div>
+
+  <div class="form-card fade-up">
+    <h3>Pesan Tempat</h3>
+    <form id="reservForm" onsubmit="submitReserv(event)">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" placeholder="Nama kamu..." required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tanggal</label>
+          <input type="date" required>
+        </div>
+        <div class="form-group">
+          <label>Jam</label>
+          <input type="time" min="08:00" max="21:00" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Jumlah Orang</label>
+          <select required>
+            <option value="">Pilih...</option>
+            <option>1 orang</option>
+            <option>2 orang</option>
+            <option>3–4 orang</option>
+            <option>5–6 orang</option>
+            <option>7+ orang</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>No. WhatsApp</label>
+          <input type="tel" placeholder="08xx..." required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Catatan Khusus</label>
+        <textarea rows="3" placeholder="Misalnya: meja di pojok, ada acara ulang tahun, dll."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Kirim Reservasi</button>
+    </form>
+    <div class="success-msg" id="successMsg">✅ Reservasi berhasil dikirim! Kami akan konfirmasi via WhatsApp segera.</div>
+  </div>
+</section>
+
+<!-- LOKASI / MAPS -->
+<section id="lokasi">
+  <div class="section-label">Temukan Kami</div>
+  <h2>Lokasi Kami</h2>
+  <p>Mudah dijangkau di pusat kota Gresik. Tersedia parkir luas!</p>
+
+  <div class="map-container">
+    <!-- Ganti src iframe di bawah dengan embed link Google Maps cafe lo -->
+    <!-- Cara: Google Maps → cari lokasi → Share → Embed a map → copy link iframe -->
+    <div class="map-placeholder">
+      <div class="map-pin">📍</div>
+      <p>KopiRuang — Gresik, Jawa Timur</p>
+      <small>Ganti placeholder ini dengan embed Google Maps kamu</small>
+      <a href="https://maps.google.com" target="_blank" class="map-open-btn">🗺️ Buka di Google Maps</a>
+    </div>
+    <!-- AKTIFKAN BARIS INI setelah dapat embed link dari Google Maps:
+    <iframe
+      src="PASTE_EMBED_URL_DISINI"
+      width="100%" height="400"
+      style="border:0;" allowfullscreen=""
+      loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    -->
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Kopi<span>Ruang</span></div>
+      <p>Ruang untuk kamu menikmati kopi, buku, dan ketenangan. Hadir di Gresik sejak 2022.</p>
+    </div>
+    <div>
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="#">Beranda</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#reservasi">Reservasi</a></li>
+        <li><a href="#lokasi">Lokasi</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Ikuti Kami</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Google Maps</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 KopiRuang. All rights reserved.</span>
+    <span>Made with ☕ in Gresik</span>
+  </div>
+</footer>
+
+<script>
+  // Menu filter
+  function filterMenu(cat, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.menu-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.classList.add('show');
+      } else {
+        card.classList.remove('show');
+      }
+    });
+  }
+
+  // Reservasi submit
+  function submitReserv(e) {
+    e.preventDefault();
+    document.getElementById('reservForm').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  }
+
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Set min date for reservation
+  const dateInput = document.querySelector('input[type=date]');
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+    dateInput.value = today;
+  }
+</script>
+</body>
+</html>
